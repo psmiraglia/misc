@@ -58,6 +58,10 @@ __LOG_DAEMON_NAME=${LOG_DAEMON_NAME:-"noname"}
 # 2 (critical), 3 (error), 4 (warning), 5 (notice), 6 (info) and 7 (debug).
 # Default value is 6 (info).
 __LOG_THRESHOLD=${LOG_THRESHOLD:-6}
+# This defines the syslog's facility if in daemon mode. Accepted values are
+# those defined in "FACILITIES AND LEVELS" section for 'logger' man page.
+# Default value is 'local0'.
+__LOG_FACILITY=${LOG_FACILITY:-"local0"}
 
 # Below and example about how to use that library
 #
@@ -143,7 +147,7 @@ function _log {
         if [ $__LOG_AS_DAEMON -eq 0 ]; then
             echo -e "(${tag}) $msg"
         else
-            logger -i -p local0.${syslog_level} \
+            logger -i -p ${__LOG_FACILITY}.${syslog_level} \
                 -t $__LOG_DAEMON_NAME "$raw_msg"
         fi
     fi
